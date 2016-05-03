@@ -89,6 +89,35 @@ Reveal.addEventListener("event3" function3() { }, false);
           </code></pre>
 				</section>
 
+				<section>
+          <h2>Async functions in sequence?</h2>
+          <p class="fragment" style="z-index:100;position:absolute;width:100%;top:0px;color:red;font-size:300px;font-weight:bold">X</p>
+					<pre><code data-noescape class="javascript">
+const result1 = function1();
+const result2 = function2(result1);
+const result3 = function3(result2);
+          </code></pre>
+				</section>
+
+				<section>
+          <h2>Async &amp; try-catch?</h2>
+          <p class="fragment" style="z-index:100;position:absolute;width:100%;top:0px;color:red;font-size:300px;font-weight:bold">X</p>
+					<pre><code data-noescape class="javascript">
+const result1;
+try { result1 = function1(); } catch(e) { }
+const result2;
+try { result2 = function2(result1); } catch(e) { }
+const result3;
+try { result3 = function3(result2); } catch(e) { }
+          </code></pre>
+				</section>
+
+				<section>
+          <h2>What's going on?</h2>
+          <p>Isn't the node.js event loop single-threaded?</p>
+          <p class="fragment"><a href="https://www.youtube.com/watch?v=8aGhZQkoFbQ">What the heck is the event loop anyway?</a></p>
+				</section>
+
 			</div>
 		</div>
 
