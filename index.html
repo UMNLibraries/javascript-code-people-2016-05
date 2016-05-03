@@ -51,7 +51,7 @@
 				</section>
 
 				<section>
-          <h2>Source Code</a>
+          <h2>Source Code</h2>
 					<pre><code data-noescape class="javascript">
 function1();
 function2();
@@ -78,6 +78,16 @@ function3();
         <section data-background="asynchrony.png" data-background-size="60%" data-state="centerFalse">
           <h2>Concurrency: Asynchrony</h2>
         </section>
+
+				<section>
+          <h2>So what?</h2>
+          <p>I don't care when these execute!</p>
+					<pre><code data-noescape class="javascript">
+Reveal.addEventListener("event1" function1() { }, false);
+Reveal.addEventListener("event2" function2() { }, false);
+Reveal.addEventListener("event3" function3() { }, false);
+          </code></pre>
+				</section>
 
 			</div>
 		</div>
