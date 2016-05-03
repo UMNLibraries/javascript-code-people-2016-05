@@ -59,7 +59,7 @@ function3();
           </code></pre>
 				</section>
 
-        <section data-background="synchrony.png" data-background-size="60%">
+        <section data-background="synchrony.png" data-background-size="60%" data-state="centerFalse">
           <h2>Synchrony</h2>
         </section>
 
@@ -82,6 +82,10 @@ function3();
 					{ src: 'revealjs/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
 				]
 			});
+
+      Reveal.addEventListener( 'centerFalse', function() {
+            Reveal.configure({center: false});
+      }, false ); 
 		</script>
 	</body>
 </html>
