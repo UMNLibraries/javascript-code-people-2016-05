@@ -83,9 +83,9 @@ function3();
           <h2>So what?</h2>
           <p>I don't care when these execute!</p>
 					<pre><code data-noescape class="javascript">
-Reveal.addEventListener("event1" function1() { }, false);
-Reveal.addEventListener("event2" function2() { }, false);
-Reveal.addEventListener("event3" function3() { }, false);
+Reveal.addEventListener("event1" function1, false);
+Reveal.addEventListener("event2" function2, false);
+Reveal.addEventListener("event3" function3, false);
           </code></pre>
 				</section>
 
@@ -121,9 +121,9 @@ try { result3 = function3(result2); } catch(e) { }
 				<section>
           <h2>Hybrid Environment</h2>
           <ul>
-           <li class="fragment">Sync &amp; async ops.</li>
+           <li class="fragment">Sync &amp; async ops (slow &amp; unpredictable stuff, e.g. IO, click events).</li>
            <li class="fragment">Sync: Straight to stack, executed immediately.</li>
-           <li class="fragment">Async: Executed off-stack, multi-threaded. callback(result) to callback queue.</li>
+           <li class="fragment">Async: Executed off-stack, in multi-threaded hosting environment (browser or OS). <code>callback(result)</code> to callback queue.</li>
            <li class="fragment">When stack is empty, event loop moves callbacks from queue to stack.</li>
            <li class="fragment">This is why node.js is fast.</li>
           </ul>
@@ -144,7 +144,7 @@ function1(function (err, result1) {
       (err ? console.log(err) :
         function3(result2, function(err, result3) {
           (err ? console.log(err) :
-            function4(result3);  
+            // Do something with result3
           ); 
         });          
       );
@@ -152,7 +152,30 @@ function1(function (err, result1) {
   );
 });
           </code></pre>
-          <p class="fragment"><a href="http://c2.com/cgi/wiki?ArrowAntiPattern">Arrow Anti-Pattern</a>: Most other approaches seek to avoid it.</p>
+          <p>
+            <span class="fragment">The infamous "callback hell",</span> <span class="fragment">or "pyramid of doom",</span>
+            <span class="fragment">or <a href="http://c2.com/cgi/wiki?ArrowAntiPattern">arrow anti-pattern</a>.</span><span class="fragment"> Most other approaches seek to avoid it.</span>
+          </p>
+				</section>
+
+				<section>
+          <h2><a href="https://github.com/caolan/async">async</a> Package</h2>
+					<pre><code data-noescape class="javascript">
+async.waterfall(
+  [
+    function function1(callback) {
+      callback(err, result1);
+    },
+    function function2(result1, callback) {
+      callback(err, result2);
+    },
+    function function3(result2, callback) {
+      callback(err, result3);
+    }
+  ],
+  function (err, result3) { }
+); 
+          </code></pre>
 				</section>
 
 			</div>
