@@ -123,8 +123,8 @@ try { result3 = function3(result2); } catch(e) { }
           <ul>
            <li class="fragment">Sync &amp; async ops (slow &amp; unpredictable stuff, e.g. IO, click events).</li>
            <li class="fragment">Sync: Straight to stack, executed immediately.</li>
-           <li class="fragment">Async: Executed off-stack, in multi-threaded hosting environment (browser or OS). <code>callback(result)</code> to callback queue.</li>
-           <li class="fragment">When stack is empty, event loop moves callbacks from queue to stack.</li>
+           <li class="fragment">Async: May be executed off-stack, in multi-threaded hosting environment (browser or OS). <code>callback(result)</code> to event queue.</li>
+           <li class="fragment">When stack is empty, event loop moves events/callbacks from queue to stack.</li>
            <li class="fragment">This is why node.js is fast.</li>
           </ul>
 				</section>
