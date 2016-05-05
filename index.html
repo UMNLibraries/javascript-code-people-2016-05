@@ -237,9 +237,155 @@ function task() {
             <li class="fragment">May be a little slower.</li>
             <li class="fragment">Still not well-understood by many developers.</li>
             <li class="fragment">Some subtle gotchas with error-handling.</li>
-            <li class="fragment">Still use callbacks, just in a friendlier way.</li>
+            <li class="fragment">Promises still use callbacks, just in a friendlier way.</li>
 					</ul>
 				</section>
+
+				<section>
+          <h2>There's an even better way...</h2>
+          <p>...but it requires some setup.</p>
+				</section>
+
+				<section>
+          <h2>Generators</h2>
+          <p>Generators are iterator factories, defining iterative algorithms with single functions that maintain their own state, which can be paused and resumed.</p>
+				</section>
+
+				<section>
+          <h2>Generators: Simple Example</h2>
+					<pre><code data-noescape class="javascript">
+function *naturals() {
+  var integer = 1;
+  while(true) {
+    yield integer++;
+  }
+}
+
+const it = naturals();
+console.log(it.next().value); // 1
+console.log(it.next().value); // 2
+console.log(it.next().value); // 3
+          </code></pre>
+				</section>
+
+				<section>
+          <h2>Generators: Input</h2>
+					<pre><code data-noescape class="javascript">
+function *lc() {
+  while(true) {
+    var word = yield null; // yield consumes input
+    console.log(word.toLowerCase());
+  }
+}
+
+const it = lc();
+it.next(); // Value would be ignored, only executes up to yield.
+it.next('Hello'); // hello
+it.next('World'); // world
+it.next(42); // TypeError!
+          </code></pre>
+				</section>
+
+				<section>
+          <h2>Generators: External Exception-Handling</h2>
+					<pre><code data-noescape class="javascript">
+function *lc() {
+  while(true) {
+    var word = yield null; // yield consumes input
+    console.log(word.toLowerCase());
+  }
+}
+
+const it = lc();
+it.next();
+try {
+  it.next(42); 
+} catch(e) { } // TypeError
+          </code></pre>
+				</section>
+
+				<section>
+          <h2>Generators: Internal Exception-Handling</h2>
+					<pre><code data-noescape class="javascript">
+function *lc() {
+  while(true) {
+    try {
+      var word = yield null; // yield consumes input
+      console.log(word.toLowerCase());
+    } catch (e) {} // Exceptions caught here.
+  }
+}
+
+const it = lc();
+it.next();
+try {
+  it.throw('Sending the generator an exception.'); 
+} catch(e) { } // Never gets here.
+          </code></pre>
+				</section>
+
+				<section>
+          <h2>Generators + Promises</h2>
+          <p>What if we yield a promise from a generator?</p>
+					<pre><code data-noescape class="javascript">
+function *gen() {
+  try { var result = yield asyncFunction(); }
+  catch (e) { console.error(e); }
+}
+
+var it = gen();
+var p = it.next().value;
+p.then(
+    function fulfilled(result) { },
+    function(err){ gen.throw(err); }
+);
+          </code></pre>
+				</section>
+
+				<section>
+          <h2>Coroutines</h2>
+					<pre><code data-noescape class="javascript">
+Bluebird.coroutine(function *() {
+  try { 
+    // functions return promises:
+    const result1 = yield function1();
+    const result2 = yield function2(result1);
+    const result3 = yield function3(result2);
+  }
+  catch (e) { console.error(e); }
+  return result3;
+});
+          </code></pre>
+				</section>
+
+				<section>
+          <h2>But are these really coroutines?</h2>
+          <blockquote cite="https://en.wikipedia.org/wiki/Coroutine">
+            <p> "...computer program components that generalize subroutines for nonpreemptive multitasking, by allowing multiple entry points for suspending and resuming execution at certain locations." &mdash; &mdash; <a href="https://en.wikipedia.org/wiki/Coroutine">Wikipedia: Coroutine</a></p>
+          </blockquote>
+          <p class="fragment">Generators are already semi-coroutines.</p>
+          <blockquote class="fragment">
+            <p>""Subroutines are special cases of ... coroutines." &mdash; Donald Knuth, "The Art of Computer Programming"</p>
+          </blockquote>
+				</section>
+
+				<section>
+          <h2>Coroutines: Pros &amp; Cons<h2>
+          <h3 class="fragment">Pros</h3>
+					<ul>
+            <li class="fragment">Make asynchronous code look almost identical to synchronous code. Very easy to reason about.</li>
+						<li class="fragment">Keep all the control we get from promises.</li>
+            <li class="fragment">Coroutines probably core ES soon: <a href="https://github.com/tc39/ecmascript-asyncawait">aysnc/await proposal for ES7</a></li>
+					</ul>
+          <h3 class="fragment">Cons</h3>
+					<ul>
+            <li class="fragment">May be a little slower.</li>
+            <li class="fragment">Not well-understood by most developers.</li>
+            <li class="fragment">Generators not available everywhere without transpilers like <a href="https://babeljs.io">Babel</a>.</li>
+					</ul>
+				</section>
+
+    
 
 			</div>
 		</div>
