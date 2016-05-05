@@ -159,24 +159,21 @@ function1(function (err, result1) {
 				</section>
 
 				<section>
-          <h2><a href="https://github.com/caolan/async">async</a> Package</h2>
-					<pre><code data-noescape class="javascript">
-async.waterfall(
-  [
-    function function1(callback) {
-      callback(err, result1);
-    },
-    function function2(result1, callback) {
-      callback(err, result2);
-    },
-    function function3(result2, callback) {
-      callback(err, result3);
-    }
-  ],
-  function (err, result3) { }
-); 
-          </code></pre>
+          <h2>Callbacks: Pros &amp; Cons<h2>
+          <h3 class="fragment">Pros</h3>
+					<ul>
+            <li class="fragment">Speed.</li>
+						<li class="fragment">Long history of use &amp; support.</li>
+					</ul>
+          <h3 class="fragment">Cons</h3>
+					<ul>
+            <li class="fragment">Confusing&mdash;consciousness is single-threaded.</li>
+            <li class="fragment">Familiar approaches fail: No try-catch, no returning values, poor composability, etc.</li>
+            <li class="fragment">Loss of control: Will my callback even run? How many times? Will errors be swallowed? etc.</li>
+            <li class="fragment">More: <a href="https://github.com/getify/You-Dont-Know-JS/blob/master/async%20&%20performance/ch2.md">You Don't Know JS: Async & Performance, Chapter 2: Callbacks</a></li>
+					</ul>
 				</section>
+
 
 			</div>
 		</div>
