@@ -81,12 +81,13 @@ function3();
 
 				<section>
           <h2>So what?</h2>
-          <p>I don't care when these execute!</p>
+          <p>"I don't care when these execute!"</p>
 					<pre><code data-noescape class="javascript">
 Reveal.addEventListener("event1" function1, false);
 Reveal.addEventListener("event2" function2, false);
 Reveal.addEventListener("event3" function3, false);
           </code></pre>
+          <p class="fragment">"Maybe you just don't understand functional programming."</p>
 				</section>
 
 				<section>
@@ -103,12 +104,11 @@ const result3 = function3(result2);
           <h2>Async &amp; try-catch?</h2>
           <p class="fragment" style="z-index:100;position:absolute;width:100%;top:0px;color:red;font-size:300px;font-weight:bold">X</p>
 					<pre><code data-noescape class="javascript">
-const result1;
-try { result1 = function1(); } catch(e) { }
-const result2;
-try { result2 = function2(result1); } catch(e) { }
-const result3;
-try { result3 = function3(result2); } catch(e) { }
+try {
+  const result1 = function1();
+  const result2 = function2(result1);
+  const result3 = function3(result2);
+} catch(e) { }
           </code></pre>
 				</section>
 
@@ -130,7 +130,7 @@ try { result3 = function3(result2); } catch(e) { }
 				</section>
 
 				<section>
-          <h2>So how to call async functions sequentially?</h2>
+          <h2>So how to run async functions sequentially?</h2>
           <p>An evolution of approaches...</p>
 				</section>
 
@@ -169,17 +169,84 @@ function1(function (err, result1) {
 					<ul>
             <li class="fragment">Confusing&mdash;consciousness is single-threaded.</li>
             <li class="fragment">Familiar approaches fail: No try-catch, no returning values, poor composability, etc.</li>
-            <li class="fragment">Loss of control: Will my callback even run? How many times? Will errors be swallowed? etc.</li>
+            <li class="fragment">No control: Will my callback even run? How many times? Will errors be swallowed? etc.</li>
             <li class="fragment">More: <a href="https://github.com/getify/You-Dont-Know-JS/blob/master/async%20&%20performance/ch2.md">You Don't Know JS: Async & Performance, Chapter 2: Callbacks</a></li>
 					</ul>
 				</section>
 
+				<section>
+          <h2>Promises</h2>
+          <p>A proxy for the <em>pending</em> result of an async function, to be <em>fulfilled</em> or <em>rejected</em> later.</p>
+				</section>
+
+				<section>
+          <h2>Callbacks vs. Promises</h2>
+          <p>While we give up control with callbacks...</p>
+					<pre><code data-noescape class="javascript">
+asyncFunction(function pleaseCallThis(err, result) {
+  // ...but only once, and please let me know about any errors!
+});
+          </code></pre>
+          <p class="fragment">...we keep it with promises:</p>
+					<pre class="fragment"><code data-noescape class="javascript">
+const promise = asyncFunction();
+promise.then(
+  function fulfilled (result) {},
+  function rejected (err) {}
+);
+          </code></pre>
+				</section>
+
+				<section>
+          <h2>Promises: Async Sequences</h2>
+					<pre><code data-noescape class="javascript">
+function1()
+.then(function (result1) {
+  function2(result1);
+})
+.then(function (result2) {
+  function3(result2);
+})
+.then(function (result3) {})
+.catch(err);
+          </code></pre>
+				</section>
+
+				<section>
+          <h2>Promises: Parallelism</h2>
+					<pre><code data-noescape class="javascript">
+function task() {
+  const p1 = subtask1();
+  const p2 = subtask2();
+  const p3 = subtask3();
+  Promise.all([p1, p2, p3]).then(function(results){});
+}
+          </code></pre>
+				</section>
+
+				<section>
+          <h2>Promises: Pros &amp; Cons<h2>
+          <h3 class="fragment">Pros</h3>
+					<ul>
+            <li class="fragment">Keep control: Guaranteed to be resolved only once, but can be observed many times.</li>
+						<li class="fragment">Much easier to reason about.</li>
+            <li class="fragment">Supported everywhere with packages like <a href="http://bluebirdjs.com/">Bluebird</a>, with Bluebird.promisify() for callback-based functions.</li>
+					</ul>
+          <h3 class="fragment">Cons</h3>
+					<ul>
+            <li class="fragment">May be a little slower.</li>
+            <li class="fragment">Still not well-understood by many developers.</li>
+            <li class="fragment">Some subtle gotchas with error-handling.</li>
+            <li class="fragment">Still use callbacks, just in a friendlier way.</li>
+					</ul>
+				</section>
 
 			</div>
 		</div>
 
 		<script src="revealjs/lib/js/head.min.js"></script>
 		<script src="revealjs/js/reveal.js"></script>
+
 
 		<script>
 			// More info https://github.com/hakimel/reveal.js#configuration
